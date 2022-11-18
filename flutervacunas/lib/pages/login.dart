@@ -46,82 +46,79 @@ class _LoginPageState extends State<LoginPage> {
                 ],
               ),
             ),
-            child: logoVAWidget("assets/images/logoVA.png"),
+            child: logoVAWidget("assets/images/Recurso18.png"),
           ),
           Transform.translate(
-            offset: const Offset(0, -60),
+            offset: const Offset(0, -100),
             child: Center(
               child: SingleChildScrollView(
                 child: Card(
                   elevation: 2,
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(20)),
-                  margin: const EdgeInsets.only(left: 20, right: 20, top: 260),
+                  margin: const EdgeInsets.only(left: 20, right: 20, top: 220),
                   child: Padding(
                     padding: const EdgeInsets.symmetric(
                         horizontal: 35, vertical: 20),
-                    child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: <Widget>[
-                          TextFormField(
-                            controller: user,
-                            decoration:
-                                const InputDecoration(labelText: "Usuario"),
+                    child: Column(mainAxisSize: MainAxisSize.min, children: <
+                        Widget>[
+                      TextFormField(
+                        controller: user,
+                        decoration: const InputDecoration(labelText: "Usuario"),
+                      ),
+                      const SizedBox(
+                        height: 40,
+                      ),
+                      TextFormField(
+                        controller: password,
+                        decoration:
+                            const InputDecoration(labelText: "Constraseña"),
+                        obscureText: true,
+                      ),
+                      const SizedBox(
+                        height: 30,
+                      ),
+                      ElevatedButton(
+                          style: TextButton.styleFrom(
+                            foregroundColor: Colors.white,
+                            backgroundColor: Colors.blue,
+                            padding: const EdgeInsets.symmetric(vertical: 15),
                           ),
-                          const SizedBox(
-                            height: 40,
-                          ),
-                          TextFormField(
-                            controller: password,
-                            decoration:
-                                const InputDecoration(labelText: "Constraseña"),
-                            obscureText: true,
-                          ),
-                          const SizedBox(
-                            height: 30,
-                          ),
-                          ElevatedButton(
-                              style: TextButton.styleFrom(
-                                foregroundColor: Colors.white,
-                                backgroundColor: Colors.blue,
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 15),
-                              ),
-                              onPressed: () => _login(context),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: <Widget>[
-                                  const Text("Iniciar Sesion"),
-                                  if (_loading)
-                                    Container(
-                                      height: 20,
-                                      width: 20,
-                                      margin: const EdgeInsets.only(left: 20),
-                                      child: const CircularProgressIndicator(
-                                        color: Colors.white,
-                                      ),
-                                    )
-                                ],
-                              )),
-                          const SizedBox(
-                            height: 20,
-                          ),
-                          Row(
+                          onPressed: () => _login(context),
+                          child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: <Widget>[
-                              const Text("¿No estas registrado?"),
-                              TextButton(
-                                style: TextButton.styleFrom(
-                                  foregroundColor: Colors.blue,
-                                ),
-                                child: const Text("Registrarse"),
-                                onPressed: () {
-                                  Navigator.of(context).pushNamed('');
-                                },
-                              ),
+                              const Text("Iniciar Sesion"),
+                              if (_loading)
+                                Container(
+                                  height: 20,
+                                  width: 20,
+                                  margin: const EdgeInsets.only(left: 20),
+                                  child: const CircularProgressIndicator(
+                                    color: Colors.white,
+                                  ),
+                                )
                             ],
-                          )
-                        ]),
+                          )),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          const Text("¿No estas registrado?"),
+                          TextButton(
+                            style: TextButton.styleFrom(
+                              foregroundColor: Colors.blue,
+                            ),
+                            child: const Text("Registrarse"),
+                            onPressed: () {
+                              Navigator.of(context).pushNamed('/registropage');
+                            },
+                          ),
+                        ],
+                      )
+                    ]),
                   ),
                 ),
               ),
