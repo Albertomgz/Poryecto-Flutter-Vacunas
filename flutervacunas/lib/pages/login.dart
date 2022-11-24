@@ -4,6 +4,7 @@ import 'package:flutervacunas/pages/pacientepage.dart';
 import 'package:flutervacunas/pages/registropage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutervacunas/components/componentes.dart';
+import 'package:mysql1/mysql1.dart';
 
 import '../widgets/constant.dart';
 
@@ -23,6 +24,10 @@ class _LoginPageState extends State<LoginPage> {
 
   late TextEditingController _userCurp;
   late TextEditingController _password;
+
+  //Variable para la execpciones
+
+  String _errorMessage = "";
 
   //Variables para guardar los valores en tipo string de los controladores y mandarlos como parametros en la consulta de sql
 
@@ -160,6 +165,17 @@ class _LoginPageState extends State<LoginPage> {
                                   ),
                                 ),
                               ),
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Text(
+                                  _errorMessage,
+                                  style: const TextStyle(
+                                    color: Colors.red,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
                               const SizedBox(
                                 height: 20,
                               ),
@@ -206,23 +222,37 @@ class _LoginPageState extends State<LoginPage> {
   _login(BuildContext context) {
     usuario = _userCurp.text;
     password = _password.text;
+    var results;
 
-    db.getConnection().then((conn) async {
-      var results = await conn
-          .query('SELECT tipo FROM usuario WHERE curp = ?', [usuario]);
+    if (usuario.isNotEmpty && password.isNotEmpty) {
+      db.getConnection().then((conn) async {
+        results = await conn
+            .query('SELECT tipo FROM usuario WHERE curp = ?', [usuario]);
 
-      for (var row in results) {
-        tipo = row[0];
+        for (var row in results) {
+          tipo = row[0];
+        }
+      });
+
+      if (results != null) {
+        if (tipo == 'paciente') {
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => const Pacientepage()));
+        }
+        if (tipo == 'enfermero') {
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => const Medicopage()));
+        }
+      } else {
+        setState(() {
+          _errorMessage =
+              "Usuario y contraseña incorrectos, por favor verifique sus credenciales ";
+        });
       }
-    });
-
-    if (tipo == 'paciente') {
-      Navigator.push(context,
-          MaterialPageRoute(builder: (context) => const Pacientepage()));
-    }
-    if (tipo == 'enfermero') {
-      Navigator.push(
-          context, MaterialPageRoute(builder: (context) => const Medicopage()));
+    } else {
+      setState(() {
+        _errorMessage = "Campos vacios porfavor introduzca sus datos";
+      });
     }
   }
 
