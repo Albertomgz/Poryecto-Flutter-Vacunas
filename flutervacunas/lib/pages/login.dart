@@ -1,7 +1,11 @@
 import 'package:flutervacunas/pages/medicopage.dart';
-import 'package:flutervacunas/pages/mysql.dart';
+import 'package:flutervacunas/database/mysql.dart';
 import 'package:flutervacunas/pages/pacientepage.dart';
+import 'package:flutervacunas/pages/registropage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutervacunas/components/componentes.dart';
+
+import '../widgets/constant.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -11,131 +15,201 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  // ignore: prefer_final_fields
-  bool _loading = false;
+  //Variables para base de datos
+  var db = Mysql(); //variable de la clase Mysql
+  var tipo = ''; //variable para guardar el tipo de usuario
 
-  var db = Mysql();
-  var tipo = '';
-  final user = TextEditingController();
-  final password = TextEditingController();
+  //Controlares para guardar los valores escritos para las cajas de texto
 
-  // ignore: non_constant_identifier_names
-  var Stuser = '';
-  // ignore: non_constant_identifier_names
-  var Stpass = '';
+  late TextEditingController _userCurp;
+  late TextEditingController _password;
 
+  //Variables para guardar los valores en tipo string de los controladores y mandarlos como parametros en la consulta de sql
+
+  var usuario = '';
+  var password = '';
   var prueba = "MAGL990701HPLRNS01";
 
   @override
+  void initState() {
+    super.initState();
+    _userCurp = TextEditingController();
+    _password = TextEditingController();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Stack(
-        children: <Widget>[
-          Container(
-            width: double.infinity,
-            // ignore: prefer_const_constructors
-            decoration: BoxDecoration(
-              // ignore: prefer_const_constructors
-              gradient: LinearGradient(
-                // ignore: prefer_const_literals_to_create_immutables
-                colors: [
-                  // ignore: prefer_const_constructors
-                  Color.fromRGBO(79, 195, 247, 1),
-                  // ignore: prefer_const_constructors
-                  Color.fromRGBO(1, 87, 155, 1),
-                ],
+    Size size = MediaQuery.of(context).size;
+    return SafeArea(
+      child: Scaffold(
+        body: SizedBox(
+          width: size.width,
+          height: size.height,
+          child: Stack(
+            children: [
+              const imagenLogo(
+                imgnom: 'assets/images/Recurso18.png',
               ),
-            ),
-            child: logoVAWidget("assets/images/Recurso18.png"),
-          ),
-          Transform.translate(
-            offset: const Offset(0, -100),
-            child: Center(
-              child: SingleChildScrollView(
-                child: Card(
-                  elevation: 2,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20)),
-                  margin: const EdgeInsets.only(left: 20, right: 20, top: 220),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 35, vertical: 20),
-                    child: Column(mainAxisSize: MainAxisSize.min, children: <
-                        Widget>[
-                      TextFormField(
-                        controller: user,
-                        decoration: const InputDecoration(labelText: "Usuario"),
-                      ),
-                      const SizedBox(
-                        height: 40,
-                      ),
-                      TextFormField(
-                        controller: password,
-                        decoration:
-                            const InputDecoration(labelText: "Constraseña"),
-                        obscureText: true,
-                      ),
-                      const SizedBox(
-                        height: 30,
-                      ),
-                      ElevatedButton(
-                          style: TextButton.styleFrom(
-                            foregroundColor: Colors.white,
-                            backgroundColor: Colors.blue,
-                            padding: const EdgeInsets.symmetric(vertical: 15),
-                          ),
-                          onPressed: () => _login(context),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              const Text("Iniciar Sesion"),
-                              if (_loading)
-                                Container(
-                                  height: 20,
-                                  width: 20,
-                                  margin: const EdgeInsets.only(left: 20),
-                                  child: const CircularProgressIndicator(
-                                    color: Colors.white,
+              const barraTitulo(title: 'Ingresa a tu cuenta'),
+              Padding(
+                padding: const EdgeInsets.only(top: 320.0),
+                child: Container(
+                  width: double.infinity,
+                  decoration: const BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(50),
+                        topRight: Radius.circular(50),
+                      )),
+                  child: SingleChildScrollView(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        const Text(
+                          'Bienvenido',
+                          style: TextStyle(
+                              color: kPrimaryColor,
+                              fontFamily: 'roboto',
+                              fontWeight: FontWeight.w800,
+                              fontSize: 30),
+                        ),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        Form(
+                          child: Column(
+                            children: [
+                              Container(
+                                margin:
+                                    const EdgeInsets.symmetric(vertical: 10),
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 20, vertical: 5),
+                                width: size.width * 0.8,
+                                decoration: BoxDecoration(
+                                  color: kLightPrimaryColor,
+                                  borderRadius: BorderRadius.circular(29),
+                                ),
+                                child: TextFormField(
+                                  controller: _userCurp,
+                                  cursorColor: kPrimaryColor,
+                                  decoration: const InputDecoration(
+                                      icon: Icon(
+                                        Icons.email,
+                                        color: kPrimaryColor,
+                                      ),
+                                      hintText: 'Curp',
+                                      hintStyle:
+                                          TextStyle(fontFamily: 'roboto'),
+                                      border: InputBorder.none),
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 20,
+                              ),
+                              Container(
+                                margin:
+                                    const EdgeInsets.symmetric(vertical: 10),
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 20, vertical: 5),
+                                width: size.width * 0.8,
+                                decoration: BoxDecoration(
+                                  color: kLightPrimaryColor,
+                                  borderRadius: BorderRadius.circular(29),
+                                ),
+                                child: TextFormField(
+                                  controller: _password,
+                                  obscureText: true,
+                                  cursorColor: kPrimaryColor,
+                                  decoration: const InputDecoration(
+                                      icon: Icon(
+                                        Icons.lock,
+                                        color: kPrimaryColor,
+                                      ),
+                                      hintText: 'Contraseña',
+                                      hintStyle:
+                                          TextStyle(fontFamily: 'roboto'),
+                                      border: InputBorder.none),
+                                ),
+                              ),
+                              switchListTile(),
+                              Container(
+                                margin:
+                                    const EdgeInsets.symmetric(vertical: 10),
+                                width: size.width * 0.8,
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(29),
+                                  child: ElevatedButton(
+                                    onPressed: () => _login(context),
+                                    style: ElevatedButton.styleFrom(
+                                        backgroundColor: kPrimaryColor,
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 40, vertical: 20),
+                                        textStyle: const TextStyle(
+                                            letterSpacing: 2,
+                                            color: kLightPrimaryColor,
+                                            fontSize: 12,
+                                            fontWeight: FontWeight.bold,
+                                            fontFamily: 'OpenSans')),
+                                    child: const Text("Ingresar",
+                                        style: TextStyle(
+                                            color: kLightPrimaryColor,
+                                            fontSize: 17)),
                                   ),
-                                )
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 20,
+                              ),
+                              UnderPart(
+                                title: "¿No tienes cuenta?",
+                                navigatorText: "Registrate aqui",
+                                onTap: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              const Registropage()));
+                                },
+                              ),
+                              const SizedBox(
+                                height: 20,
+                              ),
+                              const Text(
+                                '¿Olvidaste tu contraseña?',
+                                style: TextStyle(
+                                    color: kPrimaryColor,
+                                    fontFamily: 'OpenSans',
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 15),
+                              ),
+                              const SizedBox(
+                                height: 20,
+                              )
                             ],
-                          )),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          const Text("¿No estas registrado?"),
-                          TextButton(
-                            style: TextButton.styleFrom(
-                              foregroundColor: Colors.blue,
-                            ),
-                            child: const Text("Registrarse"),
-                            onPressed: () {
-                              Navigator.of(context).pushNamed('/registropage');
-                            },
                           ),
-                        ],
-                      )
-                    ]),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
-            ),
-          )
-        ],
+            ],
+          ),
+        ),
       ),
     );
   }
 
   _login(BuildContext context) {
-    Stuser = user.text;
-    Stpass = password.text;
+    usuario = _userCurp.text;
+    password = _password.text;
 
     db.getConnection().then((conn) async {
-      var results =
-          await conn.query('SELECT tipo FROM usuario WHERE curp = ?', [Stuser]);
+      var results = await conn
+          .query('SELECT tipo FROM usuario WHERE curp = ?', [usuario]);
 
       for (var row in results) {
         tipo = row[0];
@@ -151,11 +225,65 @@ class _LoginPageState extends State<LoginPage> {
           context, MaterialPageRoute(builder: (context) => const Medicopage()));
     }
   }
+
+  switchListTile() {
+    return Padding(
+      padding: const EdgeInsets.only(left: 50, right: 40),
+      child: SwitchListTile(
+        dense: true,
+        title: const Text(
+          'Recordarme',
+          style: TextStyle(fontSize: 16, fontFamily: 'OpenSans'),
+        ),
+        value: true,
+        activeColor: kPrimaryColor,
+        onChanged: (val) {},
+      ),
+    );
+  }
 }
 
-Image logoVAWidget(String imagename) {
-  return Image.asset(
-    imagename,
-    height: 300,
-  );
+class UnderPart extends StatelessWidget {
+  const UnderPart(
+      {Key? key,
+      required this.title,
+      required this.navigatorText,
+      required this.onTap})
+      : super(key: key);
+  final String title;
+  final String navigatorText;
+  final Function() onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text(
+          title,
+          style: const TextStyle(
+              fontFamily: 'roboto',
+              fontSize: 15,
+              color: Colors.grey,
+              fontWeight: FontWeight.w600),
+        ),
+        const SizedBox(
+          width: 20,
+        ),
+        InkWell(
+          onTap: () {
+            onTap();
+          },
+          child: Text(
+            navigatorText,
+            style: const TextStyle(
+                color: kPrimaryColor,
+                fontSize: 15,
+                fontWeight: FontWeight.w600,
+                fontFamily: 'roboto'),
+          ),
+        )
+      ],
+    );
+  }
 }

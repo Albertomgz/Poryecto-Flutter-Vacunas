@@ -2,7 +2,6 @@
 //
 //     final datosPersonales = datosPersonalesFromMap(jsonString);
 
-import 'package:meta/meta.dart';
 import 'dart:convert';
 
 class DatosPersonales {

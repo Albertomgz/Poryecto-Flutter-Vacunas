@@ -1,7 +1,5 @@
 // ignore_for_file: file_names
 
-import 'dart:convert';
-
 import 'package:flutervacunas/models/curpmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -117,7 +115,7 @@ class _RegistropageState extends State<Registropage> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             // ignore: prefer_const_literals_to_create_immutables
                             children: <Widget>[
-                              const Text("Iniciar Sesion"),
+                              const Text("Registrarse"),
                             ],
                           )),
                       const SizedBox(
