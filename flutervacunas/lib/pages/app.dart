@@ -1,3 +1,4 @@
+import 'package:flutervacunas/pages/Registropage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutervacunas/pages/login.dart';
 
@@ -19,6 +20,7 @@ class MyApp extends StatelessWidget {
         routes: <String, WidgetBuilder>{
           '/pacientepage': (BuildContext context) => const Pacientepage(),
           '/medicopage': (BuildContext context) => const Medicopage(),
+          '/registropage': (BuildContext context) => const Registropage(),
         });
   }
 }
