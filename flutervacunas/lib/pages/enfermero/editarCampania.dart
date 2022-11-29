@@ -1,5 +1,7 @@
 import 'package:flutervacunas/database/mysql.dart';
 import 'package:flutervacunas/models/campaniamodel.dart';
+import 'package:flutervacunas/pages/enfermero/campanas.dart';
+import 'package:flutervacunas/pages/pacientepage.dart';
 import 'package:flutter/material.dart';
 import 'package:flash/flash.dart';
 import 'package:flutervacunas/widgets/constant.dart';
@@ -56,27 +58,16 @@ class _MyWidgetState extends State<EditarCampana> {
       // print('${results}');
 
       results.forEach((row) {
-        setState(() {
-          tituloV = row[1];
-          fichaI = row[2];
-          fechaF = row[3];
-          descripcion = row[4];
-          ubicacionV = row[5];
-          idV = row[7];
-          rangoV = row[8];
-        });
+        tituloCCtrl.text = row[1];
+        fechaInicioCtrl.text = row[2];
+        fechaFinCtrl.text = row[3];
+        descripcionCtrl.text = row[4];
+        ubicacionCtrl.text = row[5];
+        idVacunaCtrl.text = row[7].toString();
+        rangoCtrl.text = row[8];
       });
       // Finally, close the connection
       conn.close();
-    });
-    setState(() {
-      tituloCCtrl.text = tituloV;
-      fechaInicioCtrl.text = fichaI;
-      fechaFinCtrl.text = fechaF;
-      descripcionCtrl.text = descripcion;
-      ubicacionCtrl.text = ubicacionV;
-      idVacunaCtrl.text = idV.toString();
-      rangoCtrl.text = rangoV;
     });
     Size size = MediaQuery.of(context).size;
     return Scaffold(
@@ -183,21 +174,18 @@ class _MyWidgetState extends State<EditarCampana> {
         formItemsDesign(
           Icons.format_size,
           TextFormField(
-            onChanged: (value) {
-              nombreV = value;
-            },
             controller: tituloCCtrl,
             decoration: const InputDecoration(
               labelText: 'Titulo campaña',
             ),
             validator: (text) {
-              String pattern = r'(^[a-zA-Z ]*$)';
+              String pattern = r'(^[a-zA-Z0-9_.-]*$)';
               RegExp regExp = new RegExp(pattern);
 
               if (text?.length == 0) {
                 return "El titulo es necesario";
               } else if (!regExp.hasMatch(text!)) {
-                return "El titulo debe de ser a-z y A-Z";
+                return "El titulo puede tener letras, números, punto o guiones.";
               }
               return null;
             },
@@ -374,7 +362,12 @@ class _MyWidgetState extends State<EditarCampana> {
               onPressed: () {
                 save();
                 Navigator.of(context).pop();
-                _showCustomFlash();
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => CampanasVacunasE(),
+                  ),
+                );
               },
               child: Text('Si'))
         ],
@@ -397,7 +390,7 @@ class _MyWidgetState extends State<EditarCampana> {
  */
     db.getConnection().then((conn) async {
       var results = await conn.query(
-          'update into campania set titulo=?,fechaInicio=?,fechaFin=?,descripcion=?,ubicacion=?,idvacuna=?,rango=? where idcampania=? values',
+          'update campania set titulo=?,fechaInicio=?,fechaFin=?,descripcion=?,ubicacion=?,idvacuna=?,rango=? where idcampania=?',
           [
             tituloV,
             fichaI,
@@ -407,15 +400,9 @@ class _MyWidgetState extends State<EditarCampana> {
             idVa,
             rangoV,
             widget.idCamp
-          ]);
-      //IUPDATE `pbdvacuna`.`campania` SET `titulo` = 'asasas', `fechaInicio` = 'asas', `fechaFin` = 'ass', `descripcion` = 'asas', `ubicacion` = 'asas', `idvacuna` = '4', `rango` = 'asas' WHERE (`idcampania` = '11');
-
-//  await conn.query('update users set age=? where name=?', [26, 'Bob']);
-      estado = true;
+          ]).then((value) => _showCustomFlash());
+      conn.close();
     });
-
-    print('Se hizo el registro?');
-    print(estado);
   }
 
   save() {
@@ -430,7 +417,42 @@ class _MyWidgetState extends State<EditarCampana> {
       keyForm.currentState!.reset();
     }
   }
-
+  void _showCustomFlashEliminar() {
+    showFlash(
+      context: context,
+      builder: (_, controller) {
+        return Flash(
+          controller: controller,
+          behavior: FlashBehavior.floating,
+          position: FlashPosition.bottom,
+          borderRadius: BorderRadius.circular(8.0),
+          borderColor: Colors.blue,
+          backgroundGradient: LinearGradient(
+            colors: [Colors.blue, Color.fromARGB(255, 10, 73, 145)],
+          ),
+          forwardAnimationCurve: Curves.easeInCirc,
+          reverseAnimationCurve: Curves.bounceIn,
+          child: DefaultTextStyle(
+            style: TextStyle(color: Colors.white),
+            child: FlashBar(
+              title: Text('Exito'),
+              content: Text('ELiminación exitoso!'),
+              indicatorColor: Colors.blue,
+              icon: const Icon(
+                Icons.check,
+                color: Colors.white,
+              ),
+              primaryAction: TextButton(
+                onPressed: () => controller.dismiss(),
+                child:
+                    const Text('Cerrar', style: TextStyle(color: Colors.white)),
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
   void _showCustomFlash() {
     showFlash(
       context: context,
@@ -450,7 +472,7 @@ class _MyWidgetState extends State<EditarCampana> {
             style: TextStyle(color: Colors.white),
             child: FlashBar(
               title: Text('Exito'),
-              content: Text('Registro exitoso!!!!'),
+              content: Text('¡Edición exitoso!'),
               indicatorColor: Colors.blue,
               icon: const Icon(
                 Icons.check,

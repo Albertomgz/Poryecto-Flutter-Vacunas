@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:flutervacunas/pages/enfermero/editarVacuna.dart';
+
 import 'agregarVacuna.dart';
 import 'package:flutervacunas/widgets/enfermero/left_drawerEnfermero.dart';
 import 'package:flutter/material.dart';
@@ -24,6 +26,7 @@ class _MyWidgetState extends State<ListVacunas> {
       results.forEach((row) {
         setState(() {
           vacuna v = vacuna();
+          v.idvacuna = row.elementAt(0);
           v.nombreVacuna = row.elementAt(1).toString();
           v.num_dosis = row.elementAt(2).toString();
           v.descripcion = row.elementAt(3).toString();
@@ -70,9 +73,8 @@ class _MyWidgetState extends State<ListVacunas> {
                 fontSize: 30),
           ),
         ),
-        Text('Lista de vacunas'),
         Container(
-            height: 500,
+            height: 400,
             child: _model.length > 0
                 ? ListView.builder(
                     padding: const EdgeInsets.all(12),
@@ -81,33 +83,29 @@ class _MyWidgetState extends State<ListVacunas> {
                       return Container(
                           height: 50,
                           child: ListTile(
-                            leading: const Icon(Icons.list),
+                            leading: const ImageIcon(
+                              AssetImage('assets/images/vacunas.png'),
+                              size: 30,
+                              color: Colors.blue,
+                            ),
                             trailing: Text(
-                              '${_model[index].nombreVacuna}',
+                              '${_model[index].tipo}',
                               style: const TextStyle(
-                                  color: Colors.green, fontSize: 15),
+                                  fontStyle: FontStyle.italic,
+                                  color: Color.fromARGB(255, 76, 175, 162),
+                                  fontSize: 15),
                             ),
-                            title: Text('${_model[index].num_dosis}'),
-                            subtitle: Text('${_model[index].descripcion}'),
-                            onTap: () => showDialog<String>(
-                              context: context,
-                              builder: (BuildContext context) => AlertDialog(
-                                title: const Text('AlertDialog Title'),
-                                content: const Text('AlertDialog description'),
-                                actions: <Widget>[
-                                  TextButton(
-                                    onPressed: () =>
-                                        Navigator.pop(context, 'Cancel'),
-                                    child: const Text('Cancel'),
-                                  ),
-                                  TextButton(
-                                    onPressed: () =>
-                                        Navigator.pop(context, 'OK'),
-                                    child: const Text('OK'),
-                                  ),
-                                ],
-                              ),
-                            ),
+                            title: Text('${_model[index].nombreVacuna}',
+                                style: const TextStyle(
+                                  color: Color.fromARGB(255, 4, 44, 65),
+                                  fontSize: 12,
+                                  fontFamily: 'roboto',
+                                  fontWeight: FontWeight.w800,
+                                )),
+                            subtitle: Text('Dosis: ${_model[index].num_dosis}'),
+                            onTap: () {
+                              _abrirEdicionVacuna(context, true, index, _model);
+                            },
                           ));
                       /*  ListTile(
                   leading: const Icon(Icons.list),
@@ -132,6 +130,20 @@ class _MyWidgetState extends State<ListVacunas> {
       MaterialPageRoute(
         fullscreenDialog: fullscreenDialog,
         builder: (context) => AgregarVacuna(),
+      ),
+    );
+  }
+
+  void _abrirEdicionVacuna(BuildContext context, bool fullscreenDialog,
+      int index, List<vacuna> model) {
+    String idVacu = model[index].idvacuna.toString();
+    print("Se abre ediciond e ");
+    print(idVacu);
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        fullscreenDialog: fullscreenDialog,
+        builder: (context) => EditarVacuna(idVacu: idVacu),
       ),
     );
   }

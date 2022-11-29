@@ -272,7 +272,7 @@ class _LoginPageState extends State<LoginPage> {
           }
           if (tipo == 'enfermero') {
             Navigator.push(context,
-                MaterialPageRoute(builder: (context) => const ListPacientes()));
+                MaterialPageRoute(builder: (context) => ListPacientes()));
           }
         } else {
           setState(() {
