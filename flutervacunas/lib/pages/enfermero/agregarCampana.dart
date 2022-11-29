@@ -70,6 +70,13 @@ class _MyWidgetState extends State<AgregarCampana> {
     String nombreV = "";
     return Column(
       children: <Widget>[
+        const Text('Formulario para registrar campaña',
+            style: TextStyle(
+                color: kPrimaryColor,
+                fontFamily: 'roboto',
+                fontWeight: FontWeight.w800,
+                fontSize: 18),
+            textAlign: TextAlign.center),
         //Busqueda
         Container(
           margin: const EdgeInsets.symmetric(vertical: 10),
@@ -156,13 +163,13 @@ class _MyWidgetState extends State<AgregarCampana> {
               labelText: 'Titulo campaña',
             ),
             validator: (text) {
-              String pattern = r'(^[a-zA-Z ]*$)';
+              String pattern = r'(^[a-zA-Z0-9_.-]*$)';
               RegExp regExp = new RegExp(pattern);
 
               if (text?.length == 0) {
                 return "El titulo es necesario";
               } else if (!regExp.hasMatch(text!)) {
-                return "El titulo debe de ser a-z y A-Z";
+                return "El titulo puede tener letras, números, punto o guiones.";
               }
               return null;
             },

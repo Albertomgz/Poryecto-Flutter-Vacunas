@@ -157,7 +157,6 @@ class _MyWidgetState extends State<CampanasVacunasE> {
               onPressed: () {
                 _elimimarCampania(_model[index].idcampania, db);
                 Navigator.of(context).pop();
-                _showCustomFlash();
               },
               child: Text('Si'))
         ],
@@ -171,7 +170,7 @@ class _MyWidgetState extends State<CampanasVacunasE> {
       context: context,
       builder: (_) => AlertDialog(
         title: Text('Eliminar registro'),
-        content: Text('¿Esta seguro de elimaar esta campaña?'),
+        content: Text('¿Esta seguro de eliminar esta campaña?'),
         actions: [
           MaterialButton(
               onPressed: () => Navigator.of(context).pop(), child: Text('No')),
@@ -179,7 +178,6 @@ class _MyWidgetState extends State<CampanasVacunasE> {
               onPressed: () {
                 _elimimarCampania(model[index].idcampania, db);
                 Navigator.of(context).pop();
-                _showCustomFlash();
               },
               child: Text('Si'))
         ],
@@ -234,6 +232,20 @@ class _MyWidgetState extends State<CampanasVacunasE> {
       ),
     );
   }
+
+  void _elimimarCampania(int? idcampania, Mysql db) {
+    print('Id de la campañia a eliminar');
+    print(idcampania.toString());
+    String idC = idcampania.toString();
+
+    //DELETE FROM `pbdvacuna`.`campania` WHERE (`idcampania` = '16');
+    db.getConnection().then((conn) async {
+      var results = await conn.query(
+          'DELETE FROM campania WHERE idcampania = ?',
+          [idC]).then((value) => _showCustomFlash());
+      conn.close();
+    });
+  }
 }
 
 _abrirEdicionCampana(BuildContext context, bool fullscreenDialog, int index,
@@ -248,17 +260,4 @@ _abrirEdicionCampana(BuildContext context, bool fullscreenDialog, int index,
       builder: (context) => EditarCampana(idCamp: idCamp),
     ),
   );
-}
-
-void _elimimarCampania(int? idcampania, Mysql db) {
-  print('Id de la campañia a eliminar');
-  print(idcampania.toString());
-  String idC = idcampania.toString();
-
-  //DELETE FROM `pbdvacuna`.`campania` WHERE (`idcampania` = '16');
-  db.getConnection().then((conn) async {
-    var results =
-        await conn.query('DELETE FROM campania WHERE idcampania = ?', [idC]);
-    conn.close();
-  });
 }

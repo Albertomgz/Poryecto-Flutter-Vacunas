@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutervacunas/database/mysql.dart';
 import 'package:flash/flash.dart';
+import 'package:flutervacunas/widgets/constant.dart';
 
 class AgregarVacuna extends StatefulWidget {
   const AgregarVacuna({
@@ -76,6 +77,15 @@ class _MyWidgetState extends State<AgregarVacuna> {
     String nombreV = "";
     return Column(
       children: <Widget>[
+        const Text(
+          'Formulario para registrar vacuna',
+          style: TextStyle(
+              color: kPrimaryColor,
+              fontFamily: 'roboto',
+              fontWeight: FontWeight.w800,
+              fontSize: 18),
+          textAlign: TextAlign.center,
+        ),
         //Aqui van los elementos de nuestro dormulario
         formItemsDesign(
           Icons.title,
@@ -88,13 +98,13 @@ class _MyWidgetState extends State<AgregarVacuna> {
               labelText: 'Nombre',
             ),
             validator: (text) {
-              String pattern = r'(^[a-zA-Z ]*$)';
+              String pattern = r'(^[a-zA-Z0-9_.-]*$)';
               RegExp regExp = new RegExp(pattern);
 
               if (text?.length == 0) {
                 return "El nombre es necesario";
               } else if (!regExp.hasMatch(text!)) {
-                return "El nombre debe de ser a-z y A-Z";
+                return "El nombre puede contener números, letras, punto o guiones.";
               }
               return null;
             },
@@ -131,7 +141,7 @@ class _MyWidgetState extends State<AgregarVacuna> {
               validator: (text) {
                 if (text?.length == 0) {
                   return "Este dato es necesario";
-                } 
+                }
                 return null;
               },
             )),
@@ -176,14 +186,26 @@ class _MyWidgetState extends State<AgregarVacuna> {
                 Color(0xFF03A0FE),
               ], begin: Alignment.topLeft, end: Alignment.bottomRight),
             ),
-            child: Text(
-              "Guardar",
-              style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 18,
-                  fontWeight: FontWeight.w500),
-            ),
             padding: const EdgeInsets.only(top: 16, bottom: 16),
+            child: RichText(
+              text: const TextSpan(
+                children: [
+                  WidgetSpan(
+                    child: Icon(
+                      Icons.save,
+                      size: 20,
+                      color: Colors.black,
+                    ),
+                  ),
+                  TextSpan(
+                      text: "Guardar",
+                      style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 18,
+                          fontWeight: FontWeight.w500)),
+                ],
+              ),
+            ),
           ),
         )
       ],
@@ -245,7 +267,7 @@ class _MyWidgetState extends State<AgregarVacuna> {
               content: Text('Registro exitoso!!!!'),
               indicatorColor: Colors.blue,
               icon: Icon(
-                Icons.info_outline_rounded,
+                Icons.check,
                 color: Colors.white,
               ),
               primaryAction: TextButton(
