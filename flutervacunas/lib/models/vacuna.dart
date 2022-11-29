@@ -4,7 +4,6 @@ class vacuna {
   String? _num_dosis;
   String? _descripcion;
   String? _tipo;
-  String? _rango;
 
   /*vacuna(this._idvacuna,this._nombreVacuna,this._num_dosis,this._descripcion,this._tipo,this._rango);*/
   //vacuna();

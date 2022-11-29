@@ -425,7 +425,7 @@ class _RegistropageState extends State<Registropage> {
 
         String date = DateFormat("yyyy-MM-dd").format(fechaNa!);
 
-        edad = calculdaredad(fechaNa!);
+        edad = calculdaredad(fechaNa);
         edadentero = edad.toInt();
 
         setState(() {

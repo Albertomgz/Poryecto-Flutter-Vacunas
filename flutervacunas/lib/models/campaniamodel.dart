@@ -7,6 +7,13 @@ class Campania {
   String? _ubicacion;
   String? _img;
   int? _idVacuna;
+  String? _rango;
+
+  String? get rango => _rango;
+
+  set rango(String? rango) {
+    _rango = rango;
+  }
 
   int? get idcampania => _idcampania;
 
