@@ -1,16 +1,18 @@
 import 'package:flutervacunas/database/mysql.dart';
+import 'package:flutervacunas/models/campaniamodel.dart';
 import 'package:flutter/material.dart';
 import 'package:flash/flash.dart';
 import 'package:flutervacunas/widgets/constant.dart';
 
-class AgregarCampana extends StatefulWidget {
-  const AgregarCampana({super.key});
+class EditarCampana extends StatefulWidget {
+  final String idCamp;
+  const EditarCampana({super.key, required this.idCamp});
 
   @override
-  State<AgregarCampana> createState() => _MyWidgetState();
+  State<EditarCampana> createState() => _MyWidgetState();
 }
 
-class _MyWidgetState extends State<AgregarCampana> {
+class _MyWidgetState extends State<EditarCampana> {
   //Variable de la clase globalKey para manejar formulario
   GlobalKey<FormState> keyFormB = new GlobalKey();
   GlobalKey<FormState> keyForm = new GlobalKey();
@@ -42,12 +44,44 @@ class _MyWidgetState extends State<AgregarCampana> {
   final _formKeyB = GlobalKey<FormState>();
   final _formKey = GlobalKey<FormState>();
 
+  // ignore: recursive_getters
+  String? get idCamp => idCamp;
+
   @override
   Widget build(BuildContext context) {
+    db.getConnection().then((conn) async {
+      var results = await conn
+          .query('SELECT * FROM campania where idcampania=?', [widget.idCamp]);
+      //  print('Resultado::');
+      // print('${results}');
+
+      results.forEach((row) {
+        setState(() {
+          tituloV = row[1];
+          fichaI = row[2];
+          fechaF = row[3];
+          descripcion = row[4];
+          ubicacionV = row[5];
+          idV = row[7];
+          rangoV = row[8];
+        });
+      });
+      // Finally, close the connection
+      conn.close();
+    });
+    setState(() {
+      tituloCCtrl.text = tituloV;
+      fechaInicioCtrl.text = fichaI;
+      fechaFinCtrl.text = fechaF;
+      descripcionCtrl.text = descripcion;
+      ubicacionCtrl.text = ubicacionV;
+      idVacunaCtrl.text = idV.toString();
+      rangoCtrl.text = rangoV;
+    });
     Size size = MediaQuery.of(context).size;
     return Scaffold(
         appBar: AppBar(
-          title: Text('Registro nueva campaña'),
+          title: Text('Editar campaña'),
         ),
         body: SingleChildScrollView(
             child: Container(
@@ -70,6 +104,7 @@ class _MyWidgetState extends State<AgregarCampana> {
     String nombreV = "";
     return Column(
       children: <Widget>[
+        Text(widget.idCamp),
         //Busqueda
         Container(
           margin: const EdgeInsets.symmetric(vertical: 10),
@@ -297,13 +332,13 @@ class _MyWidgetState extends State<AgregarCampana> {
                 children: [
                   WidgetSpan(
                     child: Icon(
-                      Icons.save,
+                      Icons.edit,
                       size: 20,
                       color: Colors.black,
                     ),
                   ),
                   TextSpan(
-                      text: "Guardar",
+                      text: "Editar",
                       style: TextStyle(
                           color: Colors.black,
                           fontSize: 18,
@@ -330,8 +365,8 @@ class _MyWidgetState extends State<AgregarCampana> {
     showDialog(
       context: context,
       builder: (_) => AlertDialog(
-        title: Text('Nuevo registro'),
-        content: Text('¿Esta seguro de realizar el este nuevo registro?'),
+        title: Text('Editar registro'),
+        content: Text('¿Esta seguro de realizar la edición de este registro?'),
         actions: [
           MaterialButton(
               onPressed: () => Navigator.of(context).pop(), child: Text('No')),
@@ -347,7 +382,7 @@ class _MyWidgetState extends State<AgregarCampana> {
     );
   }
 
-  _insertarRegistroCampana(BuildContext context) {
+  _editarRegistroCampana(BuildContext context) {
     tituloV = tituloCCtrl.text;
     fichaI = fechaInicioCtrl.text;
     fechaF = fechaFinCtrl.text;
@@ -362,10 +397,20 @@ class _MyWidgetState extends State<AgregarCampana> {
  */
     db.getConnection().then((conn) async {
       var results = await conn.query(
-          'insert into campania (titulo,fechaInicio,fechaFin,descripcion,ubicacion,idvacuna,rango) values(?,?,?,?,?,?,?)',
-          [tituloV, fichaI, fechaF, descripcion, ubicacionV, idVa, rangoV]);
-      //INSERT INTO `pbdvacuna`.`campania` (`titulo`, `fechaInicio`, `fechaFin`, `descripcion`, `ubicacion`, `idvacuna`, `rango`) VALUES ('as', 'as', 'as', 'as', 'as', '3', '<as');
+          'update into campania set titulo=?,fechaInicio=?,fechaFin=?,descripcion=?,ubicacion=?,idvacuna=?,rango=? where idcampania=? values',
+          [
+            tituloV,
+            fichaI,
+            fechaF,
+            descripcion,
+            ubicacionV,
+            idVa,
+            rangoV,
+            widget.idCamp
+          ]);
+      //IUPDATE `pbdvacuna`.`campania` SET `titulo` = 'asasas', `fechaInicio` = 'asas', `fechaFin` = 'ass', `descripcion` = 'asas', `ubicacion` = 'asas', `idvacuna` = '4', `rango` = 'asas' WHERE (`idcampania` = '11');
 
+//  await conn.query('update users set age=? where name=?', [26, 'Bob']);
       estado = true;
     });
 
@@ -375,7 +420,7 @@ class _MyWidgetState extends State<AgregarCampana> {
 
   save() {
     if (keyForm.currentState!.validate()) {
-      _insertarRegistroCampana(context);
+      _editarRegistroCampana(context);
       print("Nombre ${tituloCCtrl.text}");
       print("Edad ${fechaInicioCtrl.text}");
       print("Descripción ${fechaFinCtrl.text}");

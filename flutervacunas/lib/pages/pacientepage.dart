@@ -74,7 +74,11 @@ class _MyWidgetState extends State<ListCampania> {
                             text: 'Ver mas',
                           ),
                         ])),
-                  ));
-            })));
+                  )
+                  );
+            }
+            )
+            )
+            );
   }
 }

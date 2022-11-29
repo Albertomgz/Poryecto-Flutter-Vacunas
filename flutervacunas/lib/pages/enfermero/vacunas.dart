@@ -5,6 +5,7 @@ import 'package:flutervacunas/widgets/enfermero/left_drawerEnfermero.dart';
 import 'package:flutter/material.dart';
 import 'package:flutervacunas/models/vacuna.dart';
 import 'package:flutervacunas/database/mysql.dart';
+import 'package:flutervacunas/widgets/constant.dart';
 
 class ListVacunas extends StatefulWidget {
   const ListVacunas({super.key});
@@ -20,9 +21,6 @@ class _MyWidgetState extends State<ListVacunas> {
     db.getConnection().then((conn) async {
       _model.clear();
       var results = await conn.query('SELECT * FROM vacuna');
-      //  print('Resultado::');
-      // print('${results}');
-
       results.forEach((row) {
         setState(() {
           vacuna v = vacuna();
@@ -31,15 +29,8 @@ class _MyWidgetState extends State<ListVacunas> {
           v.descripcion = row.elementAt(3).toString();
           v.tipo = row.elementAt(4).toString();
           _model.add(v);
-          /*    print('Valores---->');
-          print(row.values!.elementAt(0).toString());
-          print('Tamaño map---->');
-          print(_model.length);*/
         });
       });
-      /*for (var row in results) {
-        tipo = row[0];
-      }*/
       // Finally, close the connection
       conn.close();
     });
@@ -70,7 +61,14 @@ class _MyWidgetState extends State<ListVacunas> {
         // ignore: prefer_const_constructors
         Padding(
           padding: const EdgeInsets.all(16.0),
-          child: Text('Lista de vacunas...'),
+          child: const Text(
+            'Vacunas',
+            style: TextStyle(
+                color: kPrimaryColor,
+                fontFamily: 'roboto',
+                fontWeight: FontWeight.w800,
+                fontSize: 30),
+          ),
         ),
         Text('Lista de vacunas'),
         Container(

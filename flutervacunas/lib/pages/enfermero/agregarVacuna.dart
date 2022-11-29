@@ -17,13 +17,13 @@ class _MyWidgetState extends State<AgregarVacuna> {
   //Controlares para guardar los valores escritos para las cajas de texto
   TextEditingController NombreVCtrl = new TextEditingController();
   TextEditingController NumDosisCtrl = new TextEditingController();
-  TextEditingController EdadCtrl = new TextEditingController();
+  TextEditingController TipoCtrl = new TextEditingController();
   TextEditingController DescripcionCtrl = new TextEditingController();
   //declaramos otra variable conn la clase GlobalKey para poder manejar el formulario
   GlobalKey<FormState> keyForm = new GlobalKey();
   var nombreV = '';
   var numDosis = '';
-  var edad = '';
+  var tipo = '';
   var descripcion = '';
 
   final _formKey = GlobalKey<FormState>();
@@ -41,21 +41,20 @@ class _MyWidgetState extends State<AgregarVacuna> {
           key: keyForm,
           child: formUI(),
         ),
-      )
-      ),
+      )),
     );
   }
 
   _insertarRegistroV(BuildContext context) {
     nombreV = NombreVCtrl.text;
     numDosis = NumDosisCtrl.text;
-    edad = EdadCtrl.text;
+    tipo = TipoCtrl.text;
     descripcion = DescripcionCtrl.text;
 
     db.getConnection().then((conn) async {
       var results = await conn.query(
-          'insert into vacuna (nombre,num_dosis,descripcion,tipo,rango) values(?,?,?,?,?)',
-          [nombreV, numDosis, descripcion, edad, 1]);
+          'insert into vacuna (nombre,num_dosis,descripcion,tipo) values(?,?,?,?)',
+          [nombreV, numDosis, descripcion, tipo]);
       //INSERT INTO `pbdvacuna`.`vacuna` (`nombre`, `num_dosis`, `descripcion`, `tipo`, `rango`) VALUES ('as', 'a', 'aaa', 'a', 'aa');
 
 //var result = await conn.query('insert into users (name, email, age) values (?, ?, ?)', ['Bob', 'bob@bob.com', 25]);
@@ -79,7 +78,7 @@ class _MyWidgetState extends State<AgregarVacuna> {
       children: <Widget>[
         //Aqui van los elementos de nuestro dormulario
         formItemsDesign(
-          Icons.person,
+          Icons.title,
           TextFormField(
             onChanged: (value) {
               nombreV = value;
@@ -103,7 +102,7 @@ class _MyWidgetState extends State<AgregarVacuna> {
         ),
 
         formItemsDesign(
-            Icons.phone,
+            Icons.tag,
             TextFormField(
               controller: NumDosisCtrl,
               decoration: const InputDecoration(
@@ -122,26 +121,23 @@ class _MyWidgetState extends State<AgregarVacuna> {
             )),
 
         formItemsDesign(
-            Icons.date_range,
+            Icons.label,
             TextFormField(
-              controller: EdadCtrl,
+              controller: TipoCtrl,
               decoration: const InputDecoration(
-                labelText: 'Edad',
+                labelText: 'Tipo',
               ),
-              keyboardType: TextInputType.number,
-              maxLength: 2,
+              keyboardType: TextInputType.text,
               validator: (text) {
                 if (text?.length == 0) {
                   return "Este dato es necesario";
-                } else if ((text!.length > 2) && text.isNotEmpty) {
-                  return "Introduzca una edad valida de no más de digitos !";
-                }
+                } 
                 return null;
               },
             )),
 
         formItemsDesign(
-            Icons.email,
+            Icons.description,
             TextFormField(
               controller: DescripcionCtrl,
               decoration: const InputDecoration(
@@ -198,7 +194,7 @@ class _MyWidgetState extends State<AgregarVacuna> {
     if (keyForm.currentState!.validate()) {
       _insertarRegistroV(context);
       print("Nombre ${NombreVCtrl.text}");
-      print("Edad ${EdadCtrl.text}");
+      print("Edad ${TipoCtrl.text}");
       print("Descripción ${DescripcionCtrl.text}");
       print("Número dosis ${NumDosisCtrl.text}");
       keyForm.currentState!.reset();
@@ -238,7 +234,7 @@ class _MyWidgetState extends State<AgregarVacuna> {
           borderRadius: BorderRadius.circular(8.0),
           borderColor: Colors.blue,
           backgroundGradient: LinearGradient(
-            colors: [Colors.pink, Colors.red],
+            colors: [Colors.blue, Color.fromARGB(255, 10, 73, 145)],
           ),
           forwardAnimationCurve: Curves.easeInCirc,
           reverseAnimationCurve: Curves.bounceIn,
