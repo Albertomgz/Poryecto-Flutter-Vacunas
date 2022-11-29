@@ -18,7 +18,9 @@ class MyApp extends StatelessWidget {
         ),
         home: const LoginPage(),
         routes: <String, WidgetBuilder>{
-          '/pacientepage': (BuildContext context) => const Pacientepage(),
+          '/pacientepage': (BuildContext context) => ListCampania(
+                idusuario: '',
+              ),
           '/medicopage': (BuildContext context) => const Medicopage(),
           '/registropage': (BuildContext context) => const Registropage(),
         });

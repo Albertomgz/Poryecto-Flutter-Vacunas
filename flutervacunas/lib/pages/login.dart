@@ -1,12 +1,13 @@
+import 'dart:async';
+
 import 'package:flutervacunas/pages/medicopage.dart';
 import 'package:flutervacunas/database/mysql.dart';
-import 'package:flutervacunas/pages/pacientepage.dart';
 import 'package:flutervacunas/pages/registropage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutervacunas/components/componentes.dart';
-import 'package:mysql1/mysql1.dart';
 
 import '../widgets/constant.dart';
+import 'pacientepage.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -17,8 +18,11 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   //Variables para base de datos
-  var db = Mysql(); //variable de la clase Mysql
-  var tipo = ''; //variable para guardar el tipo de usuario
+  var db = Mysql();
+  //variable de la clase Mysql variable para guardar el tipo de usuario
+  String tipo = '';
+  String pass = '';
+  String curp = '';
 
   //Controlares para guardar los valores escritos para las cajas de texto
 
@@ -31,15 +35,15 @@ class _LoginPageState extends State<LoginPage> {
 
   //Variables para guardar los valores en tipo string de los controladores y mandarlos como parametros en la consulta de sql
 
-  var usuario = '';
-  var password = '';
-  var prueba = "MAGL990701HPLRNS01";
+  String usuario = '';
+  String password = '';
 
   @override
   void initState() {
     super.initState();
     _userCurp = TextEditingController();
     _password = TextEditingController();
+    _errorMessage = "";
   }
 
   @override
@@ -219,39 +223,62 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
+  validator(String value, String pass) {
+    if (value == pass) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   _login(BuildContext context) {
+    setState(() {
+      _errorMessage = "";
+    });
+
     usuario = _userCurp.text;
     password = _password.text;
+
+    // ignore: prefer_typing_uninitialized_variables
     var results;
 
-    if (usuario.isNotEmpty && password.isNotEmpty) {
+    if (usuario.isEmpty || password.isEmpty) {
+      setState(() {
+        _errorMessage = "Campos vacios porfavor introduzca sus datos";
+      });
+    } else {
       db.getConnection().then((conn) async {
-        results = await conn
-            .query('SELECT tipo FROM usuario WHERE curp = ?', [usuario]);
+        results = await conn.query(
+            'SELECT tipo,password FROM usuario WHERE curp = ?', [usuario]);
 
         for (var row in results) {
           tipo = row[0];
+          pass = row[1];
         }
+
+        conn.close();
       });
 
-      if (results != null) {
-        if (tipo == 'paciente') {
-          Navigator.push(context,
-              MaterialPageRoute(builder: (context) => const Pacientepage()));
+      Timer(const Duration(milliseconds: 700), () {
+        if (validator(pass, password)) {
+          if (tipo == 'paciente') {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => ListCampania(
+                          idusuario: _userCurp.text,
+                        )));
+          }
+          if (tipo == 'enfermero') {
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => const Medicopage()));
+          }
+        } else {
+          setState(() {
+            _errorMessage =
+                "Usuario o contraseña incorrectos, por favor verifique sus credenciales";
+          });
         }
-        if (tipo == 'enfermero') {
-          Navigator.push(context,
-              MaterialPageRoute(builder: (context) => const Medicopage()));
-        }
-      } else {
-        setState(() {
-          _errorMessage =
-              "Usuario y contraseña incorrectos, por favor verifique sus credenciales ";
-        });
-      }
-    } else {
-      setState(() {
-        _errorMessage = "Campos vacios porfavor introduzca sus datos";
       });
     }
   }

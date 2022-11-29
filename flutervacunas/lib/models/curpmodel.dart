@@ -112,7 +112,7 @@ class Datos {
         "Nombre": nombre,
         "Sexo": sexo,
         "FechaNacimiento":
-            "${fechaNacimiento.year.toString().padLeft(4, '0')}-${fechaNacimiento.month.toString().padLeft(2, '0')}-${fechaNacimiento.day.toString().padLeft(2, '0')}",
+            "${fechaNacimiento.year.toString()}-${fechaNacimiento.month.toString()}-${fechaNacimiento.day.toString()}",
         "Nacionalidad": nacionalidad,
         "DocProbatorio": docProbatorio,
         "AnioReg": anioReg,
