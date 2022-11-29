@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutervacunas/pages/enfermero/pacientes.dart';
 import 'package:flutervacunas/pages/medicopage.dart';
 import 'package:flutervacunas/database/mysql.dart';
 import 'package:flutervacunas/pages/registropage.dart';
@@ -271,7 +272,7 @@ class _LoginPageState extends State<LoginPage> {
           }
           if (tipo == 'enfermero') {
             Navigator.push(context,
-                MaterialPageRoute(builder: (context) => const Medicopage()));
+                MaterialPageRoute(builder: (context) => const ListPacientes()));
           }
         } else {
           setState(() {

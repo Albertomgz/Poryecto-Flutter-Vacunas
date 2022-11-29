@@ -1,9 +1,9 @@
 import 'package:mysql1/mysql1.dart';
 
 class Mysql {
-  static String host = '10.0.2.2',
+  static String host = '127.0.0.1',
       user = 'root',
-      password = 'root',
+      password = '123456',
       db = 'pbdvacuna';
   static int port = 3306;
 

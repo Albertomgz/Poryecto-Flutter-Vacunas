@@ -11,6 +11,8 @@ class Medicopage extends StatefulWidget {
 class _MedicopageState extends State<Medicopage> {
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return Container(
+      child: Text('PErfil del dcoente'),
+    );
   }
 }
