@@ -353,12 +353,26 @@ class _MyWidgetState extends State<EditarCampana> {
     showDialog(
       context: context,
       builder: (_) => AlertDialog(
-        title: Text('Editar registro'),
-        content: Text('¿Esta seguro de realizar la edición de este registro?'),
+        icon: const Icon(Icons.question_mark),
+        title: const Text(
+          'Editar registro',
+          style: TextStyle(
+              color: Color.fromARGB(255, 7, 32, 255),
+              fontWeight: FontWeight.w600),
+          textAlign: TextAlign.center,
+        ),
+        content: const Text(
+          '¿Esta seguro de realizar la edición de este registro?',
+          style: TextStyle(color: Colors.black),
+        ),
         actions: [
-          MaterialButton(
-              onPressed: () => Navigator.of(context).pop(), child: Text('No')),
-          MaterialButton(
+          OutlinedButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: const Text(
+                'No',
+                style: TextStyle(color: Colors.red),
+              )),
+          OutlinedButton(
               onPressed: () {
                 save();
                 Navigator.of(context).pop();
@@ -369,7 +383,10 @@ class _MyWidgetState extends State<EditarCampana> {
                   ),
                 );
               },
-              child: Text('Si'))
+              child: Text(
+                'Si',
+                style: TextStyle(color: Colors.blue),
+              ))
         ],
       ),
     );
@@ -417,6 +434,7 @@ class _MyWidgetState extends State<EditarCampana> {
       keyForm.currentState!.reset();
     }
   }
+
   void _showCustomFlashEliminar() {
     showFlash(
       context: context,
@@ -453,6 +471,7 @@ class _MyWidgetState extends State<EditarCampana> {
       },
     );
   }
+
   void _showCustomFlash() {
     showFlash(
       context: context,

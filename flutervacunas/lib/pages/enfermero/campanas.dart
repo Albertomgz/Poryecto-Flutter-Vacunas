@@ -148,11 +148,23 @@ class _MyWidgetState extends State<CampanasVacunasE> {
     showDialog(
       context: context,
       builder: (_) => AlertDialog(
+        icon: const Icon(Icons.question_mark),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(30),
+        ),
         title: Text('Eliminar registro'),
         content: Text('¿Esta seguro de elimaar esta campaña?'),
         actions: [
           MaterialButton(
-              onPressed: () => Navigator.of(context).pop(), child: Text('No')),
+              color: Colors.red,
+              onPressed: () => Navigator.of(context).pop(),
+              child: const Text(
+                'No',
+                style: TextStyle(
+                  color: Colors.red,
+                  fontFamily: 'roboto',
+                ),
+              )),
           MaterialButton(
               onPressed: () {
                 _elimimarCampania(_model[index].idcampania, db);
@@ -169,17 +181,31 @@ class _MyWidgetState extends State<CampanasVacunasE> {
     showDialog(
       context: context,
       builder: (_) => AlertDialog(
-        title: Text('Eliminar registro'),
-        content: Text('¿Esta seguro de eliminar esta campaña?'),
+        icon: const Icon(Icons.question_mark),
+        title: const Text(
+          'Eliminar registro',
+          style: TextStyle(
+              color: Color.fromARGB(255, 7, 32, 255),
+              fontWeight: FontWeight.w600),
+          textAlign: TextAlign.center,
+        ),
+        content: const Text('¿Esta seguro de eliminar esta campaña?',
+            style: TextStyle(
+              color: Colors.black,
+            )),
         actions: [
-          MaterialButton(
-              onPressed: () => Navigator.of(context).pop(), child: Text('No')),
-          MaterialButton(
+          OutlinedButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: const Text(
+                'No',
+                style: TextStyle(color: Colors.red),
+              )),
+          OutlinedButton(
               onPressed: () {
                 _elimimarCampania(model[index].idcampania, db);
                 Navigator.of(context).pop();
               },
-              child: Text('Si'))
+              child: Text('Si', style: TextStyle(color: Colors.blue)))
         ],
       ),
     );

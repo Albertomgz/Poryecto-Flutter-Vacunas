@@ -1,5 +1,6 @@
+import 'package:flutervacunas/models/aplicacion.dart';
 import 'package:flutervacunas/models/usuario.dart';
-import 'package:flutervacunas/models/vacuna.dart';
+import 'package:flutervacunas/pages/enfermero/pacientes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutervacunas/database/mysql.dart';
 import 'package:flash/flash.dart';
@@ -18,9 +19,9 @@ class AceptarAplicacion extends StatefulWidget {
 // ignore: camel_case_types
 class _MedicopageState extends State<AceptarAplicacion> {
   var db = Mysql();
-  List<vacuna> _model = [];
+  List<aplicacion> _model = [];
   String? get idEnfer => idEnfer;
-  String idC = '3';
+  String idC = '2';
   DateTime fechaactual =
       DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
   DateTime now = new DateTime.now();
@@ -32,81 +33,86 @@ class _MedicopageState extends State<AceptarAplicacion> {
     db.getConnection().then((conn) async {
       _model.clear();
       var results = await conn.query(
-          'select * from vacuna where idvacuna=(select idvacuna from campania where idcampania=(select idcampania from aplicacion where estado="pendiente" and idpaciente=?))',
+          'select vacuna.idvacuna,campania.idcampania,vacuna.nombre,campania.titulo,vacuna.descripcion,aplicacion.idaplicacion from vacuna inner join campania  on campania.idvacuna=vacuna.idvacuna inner join aplicacion on campania.idcampania=aplicacion.idcampania and aplicacion.estado="pendiente" and aplicacion.idpaciente=?',
           [widget.idEnfer]);
       results.forEach((row) {
         setState(() {
-          vacuna v = vacuna();
-          v.idvacuna = row.elementAt(0);
-          v.nombreVacuna = row.elementAt(1).toString();
-          v.num_dosis = row.elementAt(2).toString();
-          v.descripcion = row.elementAt(3).toString();
-          v.tipo = row.elementAt(4).toString();
-          _model.add(v);
+          aplicacion a = aplicacion();
+          a.idVacuA = row.elementAt(0).toString();
+          a.idCampaA = row.elementAt(1).toString();
+          a.nombreVacunaA = row.elementAt(2);
+          a.nombreCampanaA = row.elementAt(3);
+          a.descripcionVacunaA = row.elementAt(4);
+          a.idAplicacion = row.elementAt(5);
+          _model.add(a);
         });
       });
       // Finally, close the connection
       conn.close();
     });
-    /* db.getConnection().then((conn) async {
-      _model.clear();
-      var results = await conn.query(
-          'select idcampania from campania where idcampania=(select idcampania from aplicacion where idpaciente=?)',
-          [widget.idEnfer]);
-
-      for (var row in results) {
-        idC = row[0];
-      }
-      // Finally, close the connection
-      conn.close();
-    });*/
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Solicitudes de aplicación'),
-      ),
-      body: ListView.builder(
-          padding: const EdgeInsets.all(12),
-          itemCount: _model.length,
-          itemBuilder: ((BuildContext context, int index) {
-            return Padding(
-                padding: const EdgeInsets.fromLTRB(15, 20, 15, 0),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(30),
-                  child: GFCard(
-                      boxFit: BoxFit.cover,
-                      image: Image.asset('assets/images/17538.jpg',
-                          color: Colors.blue),
-                      title: GFListTile(
-                        title: Text('${_model[index].nombreVacuna}'),
-                      ),
-                      content: Text('${_model[index].descripcion}'),
-                      buttonBar: GFButtonBar(children: <Widget>[
-                        GFButton(
-                          onPressed: () {
-                            _mostrarAlerte(context, db);
-                          },
-                          text: 'Aplicar',
-                        ),
-                      ])),
-                ));
-          })),
-    );
+        appBar: AppBar(
+          title: Text('Solicitudes de aplicación'),
+        ),
+        body: _model.length > 0
+            ? ListView.builder(
+                padding: const EdgeInsets.all(12),
+                itemCount: _model.length,
+                itemBuilder: ((BuildContext context, int index) {
+                  return Padding(
+                      padding: const EdgeInsets.fromLTRB(15, 20, 15, 0),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(30),
+                        child: GFCard(
+                            boxFit: BoxFit.cover,
+                            image: Image.asset('assets/images/17538.jpg',
+                                color: Colors.blue),
+                            title: GFListTile(
+                              title: Text('${_model[index].nombreVacunaA}'),
+                            ),
+                            content:
+                                Text('${_model[index].descripcionVacunaA}'),
+                            buttonBar: GFButtonBar(children: <Widget>[
+                              GFButton(
+                                onPressed: () {
+                                  _mostrarAlerte(context, db,
+                                      _model[index].idAplicacion.toString());
+                                },
+                                text: 'Aplicar',
+                              ),
+                            ])),
+                      ));
+                }))
+            : Container(
+                padding: EdgeInsets.all(16.0),
+                alignment: Alignment.topCenter,
+                child: const Text(
+                  'Sin solicitudes...',
+                  style: TextStyle(
+                      color: Colors.red,
+                      fontFamily: 'roboto',
+                      fontWeight: FontWeight.w600,
+                      fontSize: 18,
+                      fontStyle: FontStyle.italic),
+                  textAlign: TextAlign.center,
+                ),
+              ));
   }
 
-  void _aprobarAplicacion(String idC, String? idEnfer, Mysql db) {
-    print("ic campaña ${idC}");
-    print("id paciente ${widget.idEnfer}");
-    //INSERT INTO `pbdvacuna`.`aplicacion` (`estado`, `fecha`, `idcampania`, `idpaciente`) VALUES ('aplicada', '29/11/2022', '2', '1');
+  void _aprobarAplicacion(Mysql db, String idA) {
+    print("ic aplicacion ${idA}");
+    //UPDATE `pbdvacuna`.`aplicacion` SET `estado` = 'aplicada' WHERE (`idaplicacion` = '1');
+
     db.getConnection().then((conn) async {
       var results = await conn.query(
-          'insert into aplicacion (estado,fecha,idcampania,idpaciente) values(?,?,?,?)',
-          ['aplicada', now, idC, widget.idEnfer]);
+          'update aplicacion set estado="aplicada" where idaplicacion=?',
+          [idA]).then((value) => _showCustomFlash());
       conn.close();
     });
   }
 
 //dialogo de alerta
-  void _mostrarAlerte(BuildContext context, Mysql db) {
+  void _mostrarAlerte(BuildContext context, Mysql db, String idA) {
     showDialog(
       context: context,
       builder: (_) => AlertDialog(
@@ -118,9 +124,14 @@ class _MedicopageState extends State<AceptarAplicacion> {
               onPressed: () => Navigator.of(context).pop(), child: Text('No')),
           MaterialButton(
               onPressed: () {
-                _aprobarAplicacion(idC, idEnfer, db);
+                _aprobarAplicacion(db, idA);
                 Navigator.of(context).pop();
-                _showCustomFlash();
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ListPacientes(),
+                  ),
+                );
               },
               child: Text('Si'))
         ],
