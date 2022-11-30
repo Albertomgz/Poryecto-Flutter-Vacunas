@@ -228,18 +228,26 @@ class _MyWidgetState extends State<AgregarVacuna> {
     showDialog(
       context: context,
       builder: (_) => AlertDialog(
-        title: Text('Nuevo registro'),
-        content: Text('¿Esta seguro de realizar el este nuevo registro?'),
+        title: Text(
+          'Nuevo registro',
+          style: TextStyle(
+              color: Color.fromARGB(255, 7, 32, 255),
+              fontWeight: FontWeight.w600),
+          textAlign: TextAlign.center,
+        ),
+        content: Text('¿Esta seguro de realizar el este nuevo registro?',
+            style: TextStyle(color: Colors.black)),
         actions: [
-          MaterialButton(
-              onPressed: () => Navigator.of(context).pop(), child: Text('No')),
-          MaterialButton(
+          OutlinedButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: Text('No', style: TextStyle(color: Colors.red))),
+          OutlinedButton(
               onPressed: () {
                 save();
                 Navigator.of(context).pop();
                 _showCustomFlash();
               },
-              child: Text('Si'))
+              child: Text('Si', style: TextStyle(color: Colors.blue)))
         ],
       ),
     );

@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutervacunas/pages/enfermero/vacunas.dart';
 import 'package:flutter/material.dart';
 import 'package:flutervacunas/database/mysql.dart';
@@ -244,12 +246,23 @@ class _MyWidgetState extends State<EditarVacuna> {
     showDialog(
       context: context,
       builder: (_) => AlertDialog(
-        title: Text('Eliminar registro'),
-        content: Text('¿Esta seguro de eliminar ese registro de vacuna?'),
+        icon: Icon(Icons.question_mark),
+        title: const Text(
+          'Eliminar registro',
+          style: TextStyle(
+              color: Color.fromARGB(255, 7, 32, 255),
+              fontWeight: FontWeight.w600),
+          textAlign: TextAlign.center,
+        ),
+        content: const Text('¿Esta seguro de eliminar ese registro de vacuna?'),
         actions: [
-          MaterialButton(
-              onPressed: () => Navigator.of(context).pop(), child: Text('No')),
-          MaterialButton(
+          OutlinedButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: const Text(
+                'No',
+                style: TextStyle(color: Colors.red),
+              )),
+          OutlinedButton(
               onPressed: () {
                 _elimimarVacuna(idVacu, db);
                 Navigator.push(
@@ -260,7 +273,7 @@ class _MyWidgetState extends State<EditarVacuna> {
                 );
                 _showCustomFlashE();
               },
-              child: Text('Si'))
+              child: Text('Si', style: TextStyle(color: Colors.blue)))
         ],
       ),
     );
@@ -282,18 +295,27 @@ class _MyWidgetState extends State<EditarVacuna> {
     showDialog(
       context: context,
       builder: (_) => AlertDialog(
-        title: Text('Editar registro'),
-        content: Text('¿Esta seguro de realizar los cambios en el registro?'),
+        icon: const Icon(Icons.question_mark),
+        title: const Text(
+          'Editar registro',
+          style: TextStyle(
+              color: Color.fromARGB(255, 7, 32, 255),
+              fontWeight: FontWeight.w600),
+          textAlign: TextAlign.center,
+        ),
+        content: const Text('¿Esta seguro de realizar los cambios en el registro?',
+            style: TextStyle(color: Colors.black)),
         actions: [
-          MaterialButton(
-              onPressed: () => Navigator.of(context).pop(), child: Text('No')),
-          MaterialButton(
+          OutlinedButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: const Text('No', style: TextStyle(color: Colors.red))),
+          OutlinedButton(
               onPressed: () {
                 save();
                 Navigator.of(context).pop();
                 _showCustomFlash();
               },
-              child: Text('Si'))
+              child: Text('Si', style: TextStyle(color: Colors.blue)))
         ],
       ),
     );
