@@ -21,11 +21,11 @@ class _MyWidgetState extends State<LeftDrawerE> {
               size: 48.0,
               color: Colors.white,
             ),*/
-            accountName: Text('Nombre: Alberto Martinez',
+            accountName: Text('Nombre: AYLIN CIELO RODRIGUEZ',
                 textAlign: TextAlign.center,
                 style: TextStyle(
                     fontStyle: FontStyle.italic, color: Colors.black)),
-            accountEmail: Text('CURP: ALBA950814MPWRRS03',
+            accountEmail: Text('CURP: CIRA000224MPLLDYA6',
                 style: TextStyle(
                     fontStyle: FontStyle.italic, color: Colors.black)),
             currentAccountPicture: CircleAvatar(

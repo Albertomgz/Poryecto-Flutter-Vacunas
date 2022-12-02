@@ -226,10 +226,10 @@ class _MyWidgetState extends State<EditarVacuna> {
           ),
         ),
         Container(
-          width: 210,
+          width: 310,
           height: 50,
           child: GFButton(
-            color: Colors.red,
+            color: kLightPrimaryColor,
             onPressed: () {
               _mostrarAlerte2(context, widget.idVacu, db);
             },
@@ -303,7 +303,8 @@ class _MyWidgetState extends State<EditarVacuna> {
               fontWeight: FontWeight.w600),
           textAlign: TextAlign.center,
         ),
-        content: const Text('¿Esta seguro de realizar los cambios en el registro?',
+        content: const Text(
+            '¿Esta seguro de realizar los cambios en el registro?',
             style: TextStyle(color: Colors.black)),
         actions: [
           OutlinedButton(
@@ -366,9 +367,9 @@ class _MyWidgetState extends State<EditarVacuna> {
           behavior: FlashBehavior.floating,
           position: FlashPosition.bottom,
           borderRadius: BorderRadius.circular(8.0),
-          borderColor: Colors.blue,
+          borderColor: kPrimaryColor,
           backgroundGradient: LinearGradient(
-            colors: [Colors.blue, Color.fromARGB(255, 10, 73, 145)],
+            colors: [kPrimaryColor],
           ),
           forwardAnimationCurve: Curves.easeInCirc,
           reverseAnimationCurve: Curves.bounceIn,
@@ -377,7 +378,7 @@ class _MyWidgetState extends State<EditarVacuna> {
             child: FlashBar(
               title: Text('Exito'),
               content: Text('¡Edición exitosa!'),
-              indicatorColor: Colors.blue,
+              indicatorColor: kPrimaryColor,
               icon: Icon(
                 Icons.check,
                 color: Colors.white,

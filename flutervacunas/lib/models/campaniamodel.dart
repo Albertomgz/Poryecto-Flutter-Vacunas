@@ -6,7 +6,7 @@ class Campania {
   String? _descripcionCampania;
   String? _ubicacion;
   String? _img;
-  int? _idVacuna;
+  String? _idVacuna;
   String? _rango;
 
   String? get rango => _rango;
@@ -57,9 +57,9 @@ class Campania {
     _img = ubicacion;
   }
 
-  int? get idVacuna => _idVacuna;
+  String? get idVacuna => _idVacuna;
 
-  set idVacuna(int? idVacuna) {
+  set idVacuna(String? idVacuna) {
     _idVacuna = idVacuna;
   }
 }

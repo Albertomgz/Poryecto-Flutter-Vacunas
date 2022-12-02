@@ -1,14 +1,13 @@
 import 'dart:async';
 
 import 'package:flutervacunas/pages/enfermero/pacientes.dart';
-import 'package:flutervacunas/pages/medicopage.dart';
 import 'package:flutervacunas/database/mysql.dart';
+import 'package:flutervacunas/pages/paciente/pacientepage.dart';
 import 'package:flutervacunas/pages/registropage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutervacunas/components/componentes.dart';
 
 import '../widgets/constant.dart';
-import 'pacientepage.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});

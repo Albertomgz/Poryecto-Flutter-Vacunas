@@ -329,13 +329,12 @@ class _MyWidgetState extends State<AgregarVacuna> {
                         fontWeight: FontWeight.w600,
                         color: Colors.grey),
                     enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                          color: Color.fromRGBO(0, 40, 110, 1), width: 2.0),
+                      borderSide: BorderSide(color: kPrimaryColor, width: 2.0),
                       borderRadius: BorderRadius.all(Radius.circular(10.0)),
                     ),
                     focusedBorder: OutlineInputBorder(
                         borderSide:
-                            BorderSide(color: Colors.redAccent, width: 1.0),
+                            BorderSide(color: kLightPrimaryColor, width: 2.0),
                         borderRadius: BorderRadius.all(Radius.circular(10.0))),
                     icon: ImageIcon(
                       AssetImage('assets/images/vacunas.png'),

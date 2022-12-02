@@ -1,22 +1,28 @@
-import 'package:flutervacunas/pages/enfermero/pacientes.dart';
-import 'package:flutervacunas/widgets/enfermero/left_drawerEnfermero.dart';
+import 'package:flutervacunas/pages/paciente/pacientepage.dart';
 import 'package:flutter/material.dart';
 
 import '../../database/mysql.dart';
 import '../../widgets/constant.dart';
+import '../../widgets/paciente/left_drawerPaciente.dart';
 
-class miPefilE extends StatefulWidget {
-  const miPefilE({super.key});
+// ignore: must_be_immutable
+class PerfilPa extends StatefulWidget {
+  // ignore: prefer_typing_uninitialized_variables
+  String idusuario;
+  // ignore: prefer_typing_uninitialized_variables
+  String curpUser;
+  PerfilPa({super.key, required this.idusuario, required this.curpUser});
 
   @override
-  State<miPefilE> createState() => _MyWidgetState();
+  // ignore: no_logic_in_create_state
+  State<PerfilPa> createState() => _PerfilPaState();
 }
 
-class _MyWidgetState extends State<miPefilE> {
+class _PerfilPaState extends State<PerfilPa> {
+  // ignore: prefer_typing_uninitialized_variables
+
   var db = Mysql();
   String _errorMessage = "";
-
-  String prueba = "CIRA000224MPLLDYA6";
 
   TextEditingController curp = TextEditingController();
   TextEditingController nombre = TextEditingController();
@@ -41,21 +47,19 @@ class _MyWidgetState extends State<miPefilE> {
   @override
   Widget build(BuildContext context) {
     db.getConnection().then((conn) async {
-      var results =
-          await conn.query('SELECT * FROM usuario where curp=? ', [prueba]);
+      var results = await conn
+          .query('SELECT * FROM usuario where curp=? ', [widget.curpUser]);
 
       results.forEach((row) {
-        setState(() {
-          Fnombr = row[1];
-          Fapp = row[2];
-          Fapm = row[3];
-          Ffecha = row[4];
-          Fsexo = row[5];
-          Fedad = row[6].toString();
-          Fcurp = row[7];
-          Ftipo = row[8];
-          Fpass = row[9];
-        });
+        Fnombr = row[1];
+        Fapp = row[2];
+        Fapm = row[3];
+        Ffecha = row[4];
+        Fsexo = row[5];
+        Fedad = row[6].toString();
+        Fcurp = row[7];
+        Ftipo = row[8];
+        Fpass = row[9];
       });
       conn.close();
     });
@@ -74,7 +78,10 @@ class _MyWidgetState extends State<miPefilE> {
       appBar: AppBar(
         title: const Text("Mi Perfil"),
       ),
-      drawer: LeftDrawerE(),
+      drawer: LeftDrawerEPa(
+        nombreU: widget.idusuario,
+        CURP: widget.curpUser,
+      ),
       body: SizedBox(
         width: size.width,
         height: size.height,
@@ -357,7 +364,9 @@ class _MyWidgetState extends State<miPefilE> {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => ListPacientes(),
+            builder: (context) => ListCampania(
+              idusuario: widget.idusuario,
+            ),
           ),
         );
       });
@@ -366,5 +375,6 @@ class _MyWidgetState extends State<miPefilE> {
         _errorMessage = "Campos vacios porfavor introduzca sus datos";
       });
     }
+    Navigator.pop(context);
   }
 }

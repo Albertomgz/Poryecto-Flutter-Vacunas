@@ -494,6 +494,7 @@ class _RegistropageState extends State<Registropage> {
               'insert into paciente (idusuario ) values (?)', [idaciente]);
 
           //print("New user's id: ${results2.insertId}");
+          Navigator.pop(context);
         });
       } else {
         String tipo2 = "enfermero";
@@ -520,6 +521,8 @@ class _RegistropageState extends State<Registropage> {
               'insert into enfermero (idusuario ) values (?)', [idenfermero]);
 
           //print("New user's id: ${results2.insertId}");
+
+          Navigator.pop(context);
         });
       }
     } else {
@@ -527,7 +530,6 @@ class _RegistropageState extends State<Registropage> {
         _errorMessage = "Campos vacios porfavor introduzca sus datos";
       });
     }
-    Navigator.pop(context);
   }
 }
 

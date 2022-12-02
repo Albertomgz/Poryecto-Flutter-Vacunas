@@ -80,7 +80,7 @@ class _MyWidgetState extends State<CampanasVacunasE> {
           ),
         ),
         Container(
-            height: 450,
+            height: 650,
             child: _model.length > 0
                 ? ListView.builder(
                     padding: const EdgeInsets.all(12),
@@ -92,8 +92,10 @@ class _MyWidgetState extends State<CampanasVacunasE> {
                             borderRadius: BorderRadius.circular(30),
                             child: GFCard(
                                 boxFit: BoxFit.cover,
-                                image: Image.asset('assets/images/17538.jpg',
-                                    color: Colors.blue),
+                                image: Image.asset(
+                                  'assets/images/images.png',
+                                ),
+                                showImage: true,
                                 title: GFListTile(
                                   title: Text(
                                     'Título: ${_model[index].tituloCampania}',
@@ -111,7 +113,7 @@ class _MyWidgetState extends State<CampanasVacunasE> {
                                     '${_model[index].descripcionCampania}'),
                                 buttonBar: GFButtonBar(children: <Widget>[
                                   GFButton(
-                                    color: Colors.red,
+                                    color: kLightPrimaryColor,
                                     onPressed: () {
                                       _mostrarAlerte2(
                                           context, db, index, _model);
@@ -122,8 +124,8 @@ class _MyWidgetState extends State<CampanasVacunasE> {
                                         color: Colors.black),
                                   ),
                                   GFButton(
-                                    color: Colors.yellow,
-                                    textColor: Colors.black,
+                                    color: kPrimaryColor,
+                                    textColor: Colors.white,
                                     onPressed: () {
                                       _abrirEdicionCampana(
                                           context, true, index, _model);
@@ -131,7 +133,7 @@ class _MyWidgetState extends State<CampanasVacunasE> {
                                     text: 'Editar',
                                     icon: Icon(
                                       Icons.drive_file_rename_outline,
-                                      color: Colors.black,
+                                      color: Colors.white,
                                     ),
                                   ),
                                 ])),

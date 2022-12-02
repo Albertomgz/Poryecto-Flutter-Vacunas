@@ -41,11 +41,12 @@ dependencies:
   getwidget: ^3.0.1
   intl: ^0.17.0
   flash: ^2.0.3+1
+  google_maps_flutter: ^2.2.1
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-
+    
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
   # activated in the `analysis_options.yaml` file located at the root of your
@@ -66,8 +67,6 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-    - assets/images/Recurso18.png
-    - assets/images/17538.jpg
     - assets/images/
 
 

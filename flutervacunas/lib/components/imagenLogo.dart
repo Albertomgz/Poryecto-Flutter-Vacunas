@@ -26,7 +26,6 @@ class imagenLogo extends StatelessWidget {
             ),
           ),
         ),
-        iconBackButton(context),
       ],
     );
   }

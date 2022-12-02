@@ -75,6 +75,7 @@ class _MyWidgetState extends State<ListVacunas> {
         ),
         Container(
             height: 400,
+            margin: EdgeInsets.only(bottom: 10),
             child: _model.length > 0
                 ? ListView.builder(
                     padding: const EdgeInsets.all(12),
@@ -98,7 +99,7 @@ class _MyWidgetState extends State<ListVacunas> {
                             title: Text('${_model[index].nombreVacuna}',
                                 style: const TextStyle(
                                   color: Color.fromARGB(255, 4, 44, 65),
-                                  fontSize: 12,
+                                  fontSize: 16,
                                   fontFamily: 'roboto',
                                   fontWeight: FontWeight.w800,
                                 )),

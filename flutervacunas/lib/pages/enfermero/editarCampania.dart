@@ -31,6 +31,7 @@ class _MyWidgetState extends State<EditarCampana> {
   TextEditingController descripcionCtrl = new TextEditingController();
   TextEditingController ubicacionCtrl = new TextEditingController();
   TextEditingController rangoCtrl = new TextEditingController();
+  TextEditingController imgCtrl = new TextEditingController();
 
 // Variables de texto
   var tituloV = '';
@@ -63,8 +64,9 @@ class _MyWidgetState extends State<EditarCampana> {
         fechaFinCtrl.text = row[3];
         descripcionCtrl.text = row[4];
         ubicacionCtrl.text = row[5];
-        idVacunaCtrl.text = row[7].toString();
-        rangoCtrl.text = row[8];
+        rangoCtrl.text = row[6];
+        imgCtrl.text = row[7];
+        idVacunaCtrl.text = row[8].toString();
       });
       // Finally, close the connection
       conn.close();

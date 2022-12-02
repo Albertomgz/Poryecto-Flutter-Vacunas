@@ -4,6 +4,11 @@
         android:label="flutervacunas"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
+
+        
+<meta-data android:name="com.google.android.geo.API_KEY"
+               android:value="AIzaSyAaMwokZRCZY_x-RzFRXBs-TJBfhGkPQ8Y"/>
+
        
         <activity
             android:name=".MainActivity"

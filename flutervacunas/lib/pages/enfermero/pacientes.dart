@@ -63,14 +63,18 @@ class _MyWidgetState extends State<ListPacientes> {
             textAlign: TextAlign.center,
           ),
         ),
+        const SizedBox(
+          height: 20,
+        ),
         Container(
-            height: 150,
+            height: 700,
             child: _model.length > 0
                 ? ListView.builder(
                     padding: const EdgeInsets.all(12),
                     itemCount: _model.length,
                     itemBuilder: ((BuildContext context, int index) {
                       return Container(
+                          margin: EdgeInsets.all(20),
                           height: 50,
                           child: ListTile(
                             leading: const Icon(
